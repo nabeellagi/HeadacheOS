@@ -1,0 +1,25 @@
+---
+import DraggableGrid from '../components/DraggableGrid.jsx';
+import FullscreenGate from '../components/FullscreenGate.jsx';
+import WallpaperWrapper from '../components/WallpaperWrapper.jsx';
+import '../assets/app.css';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Headache OS</title>
+  </head>
+  <body class="bg-base-200 m-0 p-0 overflow-hidden">
+    <FullscreenGate client:load>
+      <WallpaperWrapper client:load>
+        <main class="min-h-screen flex flex-col p-3 m-0 box-border">
+          <section class="flex-1 overflow-hidden relative window-boundary">
+            <DraggableGrid client:load />
+          </section>
+        </main>
+      </WallpaperWrapper>
+    </FullscreenGate>
+  </body>
+</html>
