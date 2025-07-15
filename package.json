@@ -25,6 +25,7 @@
     "react-dom": "^19.1.0",
     "react-rnd": "^10.5.2",
     "tailwindcss": "^4.1.11",
+    "tippy.js": "^6.3.7",
     "vue": "^3.5.17",
     "zustand": "^5.0.6"
   },

@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from 'react';
-import interact from 'interactjs';
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function Window({
   id,
@@ -11,43 +10,55 @@ export default function Window({
   onMinimize,
 }) {
   const windowRef = useRef(null);
-  const boundaryRef = useRef(null);
+  const dragFrameRef = useRef(null);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const offsetRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const target = windowRef.current;
+    const dragFrame = dragFrameRef.current;
     const boundary = document.querySelector('.window-boundary');
 
-    if (!target || !boundary) return;
+    if (!target || !dragFrame || !boundary) return;
 
-    const draggable = interact(target).draggable({
-      allowFrom: '.title-bar',
-      listeners: {
-        move(event) {
-          const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-          const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+    const onMouseDown = (e) => {
+      if (!dragFrame.contains(e.target)) return;
+      setIsDragging(true);
+      offsetRef.current = {
+        x: e.clientX - pos.x,
+        y: e.clientY - pos.y,
+      };
+      e.preventDefault(); // Prevent iframe focus steal
+    };
 
-          // Get boundary size
-          const parentRect = boundary.getBoundingClientRect();
-          const elRect = target.getBoundingClientRect();
+    const onMouseMove = (e) => {
+      if (!isDragging) return;
+      const newX = Math.max(
+        0,
+        Math.min(e.clientX - offsetRef.current.x, boundary.offsetWidth - width)
+      );
+      const newY = Math.max(
+        0,
+        Math.min(e.clientY - offsetRef.current.y, boundary.offsetHeight - height)
+      );
+      setPos({ x: newX, y: newY });
+    };
 
-          // Calculate max X/Y so window stays inside
-          const maxX = parentRect.width - elRect.width;
-          const maxY = parentRect.height - elRect.height;
+    const onMouseUp = () => {
+      setIsDragging(false);
+    };
 
-          const boundedX = Math.max(0, Math.min(x, maxX));
-          const boundedY = Math.max(0, Math.min(y, maxY));
-
-          target.style.transform = `translate(${boundedX}px, ${boundedY}px)`;
-          target.setAttribute('data-x', boundedX);
-          target.setAttribute('data-y', boundedY);
-        },
-      },
-    });
+    dragFrame.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
 
     return () => {
-      draggable.unset(); // Clean up on unmount
+      dragFrame.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
     };
-  }, []);
+  }, [isDragging, pos.x, pos.y, width, height]);
 
   return (
     <div
@@ -56,13 +67,22 @@ export default function Window({
       style={{
         width: `${width}px`,
         height: `${height}px`,
-        top: '-20px',
-        left: '0px',
+        transform: `translate(${pos.x}px, ${pos.y}px)`,
         zIndex: 1000,
-        pointerEvents: 'auto',
       }}
     >
-      <div className="title-bar bg-base-300 text-sm font-semibold text-primary px-3 py-2 cursor-move flex justify-between items-center">
+      <div
+        ref={dragFrameRef}
+        className="absolute inset-0 border-2 border-transparent hover:border-primary z-20"
+        style={{ pointerEvents: 'none' }}
+      >
+        <div
+          className="absolute top-0 left-0 w-full h-4 cursor-move"
+          style={{ pointerEvents: 'auto' }}
+        ></div>
+      </div>
+
+      <div className="title-bar bg-base-300 text-sm font-semibold text-primary px-3 py-2 flex justify-between items-center z-10 relative">
         <span className="truncate w-full">{title}</span>
         <div className="flex gap-2 ml-2 shrink-0">
           <button
@@ -78,8 +98,9 @@ export default function Window({
 
       <iframe
         src={`/window/${route}`}
-        className="w-full h-full"
+        className="w-full h-full z-0 relative"
         frameBorder="0"
+        title={title}
         style={{ pointerEvents: 'auto' }}
       />
     </div>

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 export default function FullscreenGate({ children }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // More reliable fullscreen check
   const checkFullscreen = () => {
     const el =
       document.fullscreenElement ||

@@ -7,7 +7,7 @@ const GRID_SIZE = 100;
 const NUM_COLS = 8;
 
 const initialApps = [
-  { id: 1, name: 'Calculator', icon: 'mdi:calculator', x: 0, y: 0, route: 'calculator', width:400, height:300 },
+  { id: 1, name: 'Calculator', icon: 'mdi:calculator', x: 0, y: 0, route: 'calculator', width:400, height:600 },
   { id: 2, name: 'Notes', icon: 'mdi:notebook-outline', x: 2, y: 0, route: 'notes', width:400, height:300 },
   { id: 3, name: 'Wallpaper Manager', icon: 'mingcute:greatwall-fill', x: 2, y: 2, route: 'wallpaper', width:400, height:400 },
   { id: 4, name: 'Clock?', icon: 'tabler:clock-filled', x: 4, y: 2, route: 'clock', width:600, height:400 },
