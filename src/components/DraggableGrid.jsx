@@ -11,6 +11,7 @@ const initialApps = [
   { id: 2, name: 'Notes', icon: 'mdi:notebook-outline', x: 2, y: 0, route: 'notes', width:400, height:300 },
   { id: 3, name: 'Wallpaper Manager', icon: 'mingcute:greatwall-fill', x: 2, y: 2, route: 'wallpaper', width:400, height:400 },
   { id: 4, name: 'Clock?', icon: 'tabler:clock-filled', x: 4, y: 2, route: 'clock', width:600, height:400 },
+  { id: 5, name: 'Browser', icon: 'ic:twotone-settings-applications', x: 6, y: 2, route: 'browser', width:600, height:600 },
 
 ];
 
