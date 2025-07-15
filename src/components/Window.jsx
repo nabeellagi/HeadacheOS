@@ -3,7 +3,7 @@ import interact from 'interactjs';
 
 export default function Window({
   id,
-  route = 'test',
+  route,
   title = 'Untitled App',
   width = 400,
   height = 300,
