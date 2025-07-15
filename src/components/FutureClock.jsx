@@ -1,25 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import { Application, Container, Graphics, Text } from 'pixi.js';
+import { Application, Text } from 'pixi.js';
 import gsap from 'gsap';
 
 const romanize = (num) => {
   const lookup = {
-    M: 1000,
-    CM: 900,
-    D: 500,
-    CD: 400,
-    C: 100,
-    XC: 90,
-    L: 50,
-    XL: 40,
-    X: 10,
-    IX: 9,
-    V: 5,
-    IV: 4,
-    I: 1,
+    M: 1000, CM: 900, D: 500, CD: 400, C: 100,
+    XC: 90, L: 50, XL: 40, X: 10,
+    IX: 9, V: 5, IV: 4, I: 1
   };
   let roman = '';
-  for (let i in lookup) {
+  for (const i in lookup) {
     while (num >= lookup[i]) {
       roman += i;
       num -= lookup[i];
@@ -50,28 +40,6 @@ export default function FutureClock() {
       const centerX = app.renderer.width / 2;
       const centerY = app.renderer.height / 2;
 
-      const minuteCircle = new Container();
-      app.stage.addChild(minuteCircle);
-
-      const radius = 160; // Increased from 140
-      for (let i = 1; i <= 60; i++) {
-        const angle = (i / 60) * Math.PI * 2;
-        const label = new Text(romanize(i), {
-          fontFamily: 'monospace',
-          fontSize: 14,
-          fill: 0xf1fa8c,
-        });
-        label.anchor.set(0.5);
-        label.position.set(
-          centerX + radius * Math.cos(angle - Math.PI / 2),
-          centerY + radius * Math.sin(angle - Math.PI / 2)
-        );
-        minuteCircle.addChild(label);
-      }
-
-      const needle = new Graphics();
-      app.stage.addChild(needle);
-
       const timeText = new Text('', {
         fontFamily: 'monospace',
         fontSize: 56,
@@ -79,8 +47,20 @@ export default function FutureClock() {
         align: 'center',
       });
       timeText.anchor.set(0.5);
-      timeText.position.set(centerX, centerY);
+      timeText.position.set(centerX, centerY - 20);
       app.stage.addChild(timeText);
+
+      const infoText = new Text("Yes, it's Roman. Yes, it's two hours in the future. You're welcome, time traveler.", {
+        fontFamily: 'monospace',
+        fontSize: 12,
+        fill: 0x8be9fd,
+        align: 'center',
+        wordWrap: true,
+        wordWrapWidth: app.renderer.width - 40,
+      });
+      infoText.anchor.set(0.5);
+      infoText.position.set(centerX, centerY + 50);
+      app.stage.addChild(infoText);
 
       const updateClock = () => {
         const now = new Date();
@@ -88,24 +68,19 @@ export default function FutureClock() {
         const second = now.getSeconds();
         const minute = now.getMinutes();
 
-        const displayHour = romanize(hour);
-        const displaySecond = romanize(second);
+        const romanHour = romanize(hour);
+        const romanSecond = romanize(second);
+        const romanMinute = romanize(minute);
 
-        timeText.text = `${displayHour}:${displaySecond}`;
-        gsap.fromTo(
-          timeText.scale,
-          { x: 0.8, y: 0.8 },
-          { x: 1, y: 1, duration: 0.2, ease: 'back.out(1.7)' }
-        );
-
-        needle.clear();
-        needle.lineStyle({ width: 3, color: 0xff79c6 });
-        const angle = ((60 - minute) / 60) * Math.PI * 2 - Math.PI / 2;
-        const needleLength = radius - 20;
-        const x = centerX + needleLength * Math.cos(angle);
-        const y = centerY + needleLength * Math.sin(angle);
-        needle.moveTo(centerX, centerY);
-        needle.lineTo(x, y);
+        const newText = `${romanHour}:${romanSecond}:${romanMinute}`;
+        if (timeText.text !== newText) {
+          timeText.text = newText;
+          gsap.fromTo(
+            timeText,
+            { y: centerY + 10, alpha: 0 },
+            { y: centerY - 20, alpha: 1, duration: 0.4, ease: 'power2.out' }
+          );
+        }
       };
 
       updateClock();
@@ -120,5 +95,5 @@ export default function FutureClock() {
     };
   }, []);
 
-  return <div ref={containerRef} className="w-full h-full" />;
+  return <div ref={containerRef} className="w-[600px] h-[400px] overflow-hidden" />;
 }
