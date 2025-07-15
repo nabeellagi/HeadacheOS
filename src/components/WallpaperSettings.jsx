@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import localforage from 'localforage';
+import { Icon } from '@iconify/react';
 
 const subtextQueue = [
   'Extracting EXIF metadata...',
@@ -12,7 +13,15 @@ const subtextQueue = [
   'Formatting cloud drive...',
   'Rendering monkey NFT...',
   'Uploading to Reddit...',
-  'Attaching file to government report...',
+  'Attaching file to government report...'
+];
+
+const mockFiles = [
+  'sunset-overdrive-wallpaper.jpg',
+  'best-meme-ever-lol.jpeg',
+  'highres-space-photo.jpeg',
+  'deepfried-cat-wallpaper.jpeg',
+  'totally-not-virus-wallpaper.jpg'
 ];
 
 export default function WallpaperSettings() {
@@ -24,29 +33,21 @@ export default function WallpaperSettings() {
   const [uploading, setUploading] = useState(false);
   const [timesFooled, setTimesFooled] = useState(1);
 
-  // Fetch number of attempts from localForage
   useEffect(() => {
     localforage.getItem('wallpaperAttempts').then((val) => {
       if (val && typeof val === 'number') setTimesFooled(val + 1);
     });
   }, []);
 
-  const handleUpload = async (e) => {
-    e.preventDefault();
+  const handleMockUpload = async () => {
     setUploading(true);
-
-    // Update attempt count
     const nextAttempt = timesFooled;
     setTimesFooled(nextAttempt);
     await localforage.setItem('wallpaperAttempts', nextAttempt);
-
-    // Dispatch fake wallpaper change
     window.dispatchEvent(new Event('wallpaper:change'));
 
-    // Subtext sync by percent
-    const totalDuration = 25; // seconds
+    const totalDuration = 25;
     const steps = subtextQueue.length;
-    const percentInterval = 100 / steps;
 
     for (let i = 0; i < steps; i++) {
       setTimeout(() => {
@@ -54,22 +55,21 @@ export default function WallpaperSettings() {
       }, (i * totalDuration * 1000) / steps);
     }
 
-    // Animate progress from 100% to 0% over 20 seconds
     gsap.to(barRef.current, {
-      width: '0%',
+      xPercent: -100,
       duration: 20,
       ease: 'linear',
       onUpdate() {
-        const width = parseFloat(barRef.current.style.width);
-        if (width < 10 && subtextRef.current) {
+        const matrix = barRef.current.getBoundingClientRect();
+        const parent = barRef.current.parentElement.getBoundingClientRect();
+        if (matrix.right < parent.left + 10 && subtextRef.current) {
           subtextRef.current.style.color = 'red';
         }
       },
       onComplete() {
-        // Animate to -50% with final drama
-        setSubtext('Wait what...');
+        setSubtext('Hold on...');
         gsap.to(barRef.current, {
-          width: '-50%',
+          xPercent: -250,
           backgroundColor: 'red',
           duration: 5,
           onComplete: () => {
@@ -81,9 +81,9 @@ export default function WallpaperSettings() {
               { opacity: 0, scale: 0.9 },
               { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' }
             );
-          },
+          }
         });
-      },
+      }
     });
   };
 
@@ -99,29 +99,35 @@ export default function WallpaperSettings() {
       <p className="mb-4 text-sm text-gray-500">Upload a wallpaper (this is your only hope)</p>
 
       {!uploading && (
-        <form onSubmit={handleUpload} className="flex flex-col gap-4">
-          <input
-            type="file"
-            accept="image/*"
-            className="file-input file-input-bordered w-full"
-            required
-          />
-          <button type="submit" className="btn btn-error w-full">
-            Upload Image
-          </button>
-        </form>
+        <div className="grid grid-cols-3 gap-3">
+          {mockFiles.map((file, idx) => (
+            <div
+              key={idx}
+              onClick={handleMockUpload}
+              className="flex flex-col items-center cursor-pointer hover:opacity-75"
+            >
+              <Icon icon="mdi:file-image" className="text-4xl text-error" />
+              <span className="text-xs font-semibold text-center mt-1 max-w-[80px] truncate">
+                {file}
+              </span>
+            </div>
+          ))}
+        </div>
       )}
 
       {uploading && (
         <div className="mt-4">
-          <div className="w-full h-3 bg-base-300 rounded overflow-hidden mb-3">
-            <div
+           <div
               ref={barRef}
-              className="h-full bg-error transition-all"
+              className="w-full h-3 bg-error rounded overflow-hidden mb-3 relative"
               style={{ width: '100%' }}
             ></div>
-          </div>
-          <p ref={subtextRef} className="text-xs text-warning text-center">{subtext}</p>
+          <p
+            ref={subtextRef}
+            className="text-xs text-warning text-center"
+          >
+            {subtext}
+          </p>
         </div>
       )}
 
