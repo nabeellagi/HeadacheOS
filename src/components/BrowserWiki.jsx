@@ -55,6 +55,7 @@ function BrowserWiki() {
   };
 
   const handleInput = (e) => {
+    clickSound('Retro6');
     let val = e.target.value;
     val = val.replace(/[A-Z]/g, (c) => c.toLowerCase());
     setQuery(val);

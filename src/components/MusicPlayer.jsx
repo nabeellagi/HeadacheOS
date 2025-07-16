@@ -5,6 +5,7 @@ import { Icon } from '@iconify/react';
 import useMusicStore from '../stores/useMusicStore';
 import '../assets/app.css';
 import '@fontsource/roboto-slab';
+import { clickSound } from '../utils/clickSound';
 
 export default function MusicPlayer() {
   const {
@@ -150,7 +151,10 @@ export default function MusicPlayer() {
                 <div key={i} className="tooltip tooltip-top" data-tip={locked[i] ? "Locked" : "Unlocked"}>
                   <button
                     ref={el => volumeBtnRef.current[i] = el}
-                    onClick={() => toggleLock(i)}
+                    onClick={() => {
+                      toggleLock(i);
+                      clickSound('Beep', 0.4);
+                    }}
                     className={`btn btn-sm flex flex-col items-center justify-center transition-all text-lg ${locked[i] ? 'btn-warning' : 'btn-outline'}`}
                   >
                     <span>{val}</span>
@@ -161,6 +165,7 @@ export default function MusicPlayer() {
 
             <button className="btn btn-secondary w-full mt-3" onClick={() => {
               rollVolumes();
+              clickSound('Retro3');
               volumeBtnRef.current.forEach((btn, i) => {
                 if (!locked[i]) {
                   gsap.set(btn, { rotateY: 0 });
@@ -177,7 +182,10 @@ export default function MusicPlayer() {
           </div>
 
           <div className="flex gap-2">
-            <button className="btn btn-primary flex-1" onClick={handleSpin}>
+            <button className="btn btn-primary flex-1" onClick={()=>{
+              handleSpin();
+              clickSound('Spin', 0.3);
+            }}>
               <Icon icon="mdi:slot-machine" className="mr-2" /> Spin Song
             </button>
             <button
@@ -186,6 +194,7 @@ export default function MusicPlayer() {
                 if (howlRef.current) {
                   isPlaying ? howlRef.current.pause() : howlRef.current.play();
                   togglePlay();
+                  clickSound('Retro3');
                 }
               }}
             >
