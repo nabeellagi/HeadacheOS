@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import useWikiStore from "../stores/useWikiStore";
 import "../assets/app.css";
+import { clickSound } from "../utils/clickSound";
 
 function BrowserWiki() {
   const {
@@ -184,7 +185,10 @@ function BrowserWiki() {
               />
               <button
                 ref={buttonRef}
-                onClick={handleGameClick}
+                onClick={()=>{
+                  handleGameClick();
+                  clickSound('Retro3');
+                }}
                 className="btn btn-primary fixed z-50"
                 style={{
                   top: buttonPos.top,
@@ -231,7 +235,10 @@ function BrowserWiki() {
         {iframeUrl && (
           <div className="relative w-full h-[70vh]">
             <button
-              onClick={() => setIframeUrl(null)}
+              onClick={() => {
+                setIframeUrl(null)
+                clickSound('Retro4');
+              }}
               className="btn btn-error absolute top-2 left-2 z-10"
             >
               ← Back

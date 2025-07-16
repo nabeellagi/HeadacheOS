@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { nanoid } from 'nanoid';
 import { useWPMStore } from '../stores/useWPMStore';
 import '../assets/app.css';
+import { clickSound } from '../utils/clickSound';
 
 export default function WPMTest() {
   const {
@@ -26,6 +27,7 @@ export default function WPMTest() {
   }, [gameStarted, gameEnded]);
 
   const handleInput = (e) => {
+    clickSound('Retro11');
     if (pauseInput || gameEnded) return;
 
     const newValue = e.target.value;
@@ -39,6 +41,7 @@ export default function WPMTest() {
     }
 
     if (wrongStreakRef.current >= 2) {
+      clickSound('Retro9');
       setPauseInput(true);
       setShowWarning(true);
       setTimeout(() => {
@@ -54,6 +57,7 @@ export default function WPMTest() {
 
     if (newValue.length === text.length) {
       clearInterval(intervalRef.current);
+      clickSound('Retro8');
       setGameEnded(true);
     }
   };
@@ -64,7 +68,10 @@ export default function WPMTest() {
         <div className="space-y-4">
           <h1 className="text-2xl font-bold">Welcome to the HeadacheOS WPM Test</h1>
           <p className="text-sm opacity-60">Warning: This test uses random symbols and no words. Prepare yourself.</p>
-          <button className="btn btn-primary" onClick={startGame}>Begin Test</button>
+          <button className="btn btn-primary" onClick={()=>{
+            startGame();
+            clickSound('Retro6');
+          }}>Begin Test</button>
         </div>
       )}
 

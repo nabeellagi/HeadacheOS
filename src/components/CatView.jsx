@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import gsap from "gsap";
 import { Icon } from "@iconify/react";
 import "../assets/app.css";
+import { clickSound } from "../utils/clickSound";
 
 const CAT_API = "https://api.thecatapi.com/v1/images/search?limit=15";
 
@@ -75,7 +76,10 @@ export default function CatExplorer() {
             <div
               key={file.name}
               className="flex flex-col items-center text-center p-3 rounded-lg transition hover:bg-base-200 cursor-pointer"
-              onClick={() => openViewer(file)}
+              onClick={() => {
+                openViewer(file);
+                clickSound('Retro3');
+            }}
             >
               <Icon icon="mdi:file-image" className="text-4xl text-secondary" />
               <span className="text-xs mt-1 w-full truncate">{file.name}</span>
@@ -96,7 +100,10 @@ export default function CatExplorer() {
               </span>
               <button
                 className="btn btn-xs btn-error gap-1"
-                onClick={() => setIsViewerOpen(false)}
+                onClick={() => {
+                    setIsViewerOpen(false);
+                    clickSound('Retro4')
+                }}
               >
                 <Icon icon="mdi:close" />
                 Close

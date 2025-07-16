@@ -4,6 +4,7 @@ import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
 import "../assets/app.css";
 import useCalculatorStore from "../stores/useCalculatorStore";
+import { clickSound } from "../utils/clickSound";
 
 export default function CoolCalculator() {
   const {
@@ -164,7 +165,10 @@ export default function CoolCalculator() {
             />
           </div>
         ))}
-        <button onClick={handleCheck} className="btn btn-error mt-4">
+        <button onClick={()=>{
+          handleCheck();
+          clickSound('Retro6')
+        }} className="btn btn-error mt-4">
           Unlock Calculator
         </button>
       </div>
@@ -200,7 +204,10 @@ export default function CoolCalculator() {
         {buttons.map((btn, i) => (
           <button
             key={i}
-            onClick={() => handleInput(btn)}
+            onClick={() => {
+              handleInput(btn)
+              clickSound('Retro3')
+            }}
             className="btn btn-outline btn-sm"
           >
             {btn}
@@ -213,7 +220,10 @@ export default function CoolCalculator() {
       </div>
 
       <button
-        onClick={handleBackspace}
+        onClick={()=>{
+          clickSound('Retro2');
+          handleBackspace();
+        }}
         className="btn btn-xs btn-error absolute bottom-4 left-4"
         title="Backspace"
       >

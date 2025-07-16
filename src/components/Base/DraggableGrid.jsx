@@ -3,6 +3,7 @@ import interact from "interactjs";
 import { Icon } from "@iconify/react";
 import Window from "./Window.jsx";
 import initialApps from "../../data/initialApps.js";
+import { clickSound } from "../../utils/clickSound.js";
 
 const GRID_SIZE = 100;
 const NUM_COLS = 8;
@@ -59,6 +60,7 @@ export default function DraggableGrid() {
 
   // Handle icon click to open window
   const handleIconClick = (app) => {
+    clickSound('Retro3');
     if (openWindows.some((w) => w.id === app.id)) return;
     setOpenWindows((prev) => [...prev, { ...app }]);
   };
