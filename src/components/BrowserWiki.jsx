@@ -1,20 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import '../assets/app.css'
+import React, { useState, useEffect, useRef } from "react";
+import gsap from "gsap";
+import "../assets/app.css";
 
 function BrowserWiki() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [results, setResults] = useState(null);
   const [offline, setOffline] = useState(false);
   const [notFound, setNotFound] = useState(false);
   const [iframeUrl, setIframeUrl] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   const [gameStarted, setGameStarted] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [startTime, setStartTime] = useState(null);
-  const [buttonPos, setButtonPos] = useState({ top: '0px', left: '0px', scale: 1 });
+  const [buttonPos, setButtonPos] = useState({
+    top: "0px",
+    left: "0px",
+    scale: 1,
+  });
 
   const searchRef = useRef(null);
   const browserRef = useRef(null);
@@ -26,16 +30,16 @@ function BrowserWiki() {
   }, []);
 
   const handleKeyDown = (e) => {
-    if (e.key === 'CapsLock') {
+    if (e.key === "CapsLock") {
       e.preventDefault();
       return;
     }
-    if (e.key === ' ') {
+    if (e.key === " ") {
       e.preventDefault();
-      const randomSpaces = ' '.repeat(Math.floor(Math.random() * 4) + 1);
+      const randomSpaces = " ".repeat(Math.floor(Math.random() * 4) + 1);
       setQuery((prev) => prev + randomSpaces);
     }
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       initiateGame();
     }
   };
@@ -62,7 +66,7 @@ function BrowserWiki() {
     const elapsed = (Date.now() - startTime) / 1000;
     if (elapsed > 10) {
       setGameStarted(false);
-      setMessage('⏰ Too slow! Try again.');
+      setMessage("⏰ Too slow! Try again.");
       gsap.to(buttonRef.current, { scale: 1, duration: 0.3 });
       return;
     }
@@ -80,12 +84,16 @@ function BrowserWiki() {
       const randomTop = Math.floor(Math.random() * maxTop);
       const randomLeft = Math.floor(Math.random() * maxLeft);
 
-      setButtonPos({ top: `${randomTop}px`, left: `${randomLeft}px`, scale: 0.8 });
+      setButtonPos({
+        top: `${randomTop}px`,
+        left: `${randomLeft}px`,
+        scale: 0.8,
+      });
       gsap.to(buttonRef.current, {
         top: randomTop,
         left: randomLeft,
         duration: 0.4,
-        ease: 'power2.out'
+        ease: "power2.out",
       });
     }
   };
@@ -99,19 +107,19 @@ function BrowserWiki() {
     setResults(null);
     setOffline(false);
     setNotFound(false);
-    setMessage('');
+    setMessage("");
 
     gsap.fromTo(
       loaderRef.current,
       { scale: 0.5, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 0.5, ease: 'power2.out' }
+      { scale: 1, opacity: 1, duration: 0.5, ease: "power2.out" }
     );
 
     setTimeout(async () => {
       if (offlineChance < 0.5) {
         setOffline(true);
         setLoading(false);
-        setMessage('⚠️ Hey, is it offline or online? Idk, do something');
+        setMessage("⚠️ Hey, is it offline or online? Idk, do something");
         return;
       }
 
@@ -126,14 +134,15 @@ function BrowserWiki() {
         if (notFoundChance < 0.1 || data.query.search.length === 0) {
           setNotFound(true);
           setResults(null);
-          setMessage('❌ 404? Maybe lost in the void...');
+          setMessage("❌ 404? Maybe lost in the void...");
         } else {
           setResults(data.query.search);
-          if (adChance < 1 / 6) setMessage('🤑 Tired of Wikipedia? Pay 9999 gold');
+          if (adChance < 1 / 6)
+            setMessage("🤑 Tired of Wikipedia? Pay 9999 gold");
         }
       } catch (e) {
         setResults(null);
-        setMessage('🚫 Unexpected error occurred');
+        setMessage("🚫 Unexpected error occurred");
       }
 
       setLoading(false);
@@ -146,9 +155,12 @@ function BrowserWiki() {
   };
 
   return (
-    <div ref={browserRef} className="mockup-browser border bg-base-200 max-w-full w-full min-h-[90vh] shadow-lg relative">
+    <div
+      ref={browserRef}
+      className="mockup-browser border bg-base-200 max-w-full w-full min-h-[90vh] shadow-lg relative"
+    >
       <div className="mockup-browser-toolbar">
-        <div className="input">https://headacheOS.search</div>
+        <div className="input">https://headacheOS.search/wiki</div>
       </div>
       <div className="flex flex-col gap-4 p-4 w-full">
         {!iframeUrl && (
@@ -167,14 +179,21 @@ function BrowserWiki() {
                 ref={buttonRef}
                 onClick={handleGameClick}
                 className="btn btn-primary fixed z-50"
-                style={{ top: buttonPos.top, left: buttonPos.left, transform: `scale(${buttonPos.scale})` }}
+                style={{
+                  top: buttonPos.top,
+                  left: buttonPos.left,
+                  transform: `scale(${buttonPos.scale})`,
+                }}
               >
-                {gameStarted ? `Click Me (${clickCount}/4)` : 'Search'}
+                {gameStarted ? `Click Me (${clickCount}/4)` : "Search"}
               </button>
             </div>
 
             {loading && (
-              <div ref={loaderRef} className="flex justify-center items-center p-4">
+              <div
+                ref={loaderRef}
+                className="flex justify-center items-center p-4"
+              >
                 <span className="loading loading-bars loading-lg"></span>
               </div>
             )}

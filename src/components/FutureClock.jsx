@@ -1,15 +1,25 @@
-import React, { useEffect, useRef } from 'react';
-import { Application, Text } from 'pixi.js';
-import gsap from 'gsap';
-import '../assets/app.css'
+import React, { useEffect, useRef } from "react";
+import kaplay from "kaplay";
+import gsap from "gsap";
+import "../assets/app.css";
 
 const romanize = (num) => {
   const lookup = {
-    M: 1000, CM: 900, D: 500, CD: 400, C: 100,
-    XC: 90, L: 50, XL: 40, X: 10,
-    IX: 9, V: 5, IV: 4, I: 1
+    M: 1000,
+    CM: 900,
+    D: 500,
+    CD: 400,
+    C: 100,
+    XC: 90,
+    L: 50,
+    XL: 40,
+    X: 10,
+    IX: 9,
+    V: 5,
+    IV: 4,
+    I: 1,
   };
-  let roman = '';
+  let roman = "";
   for (const i in lookup) {
     while (num >= lookup[i]) {
       roman += i;
@@ -19,49 +29,53 @@ const romanize = (num) => {
   return roman;
 };
 
-export default function FutureClock() {
+export default function FutureClockKaboom() {
   const containerRef = useRef(null);
+  const canvasRef = useRef(null);
 
   useEffect(() => {
-    let app;
-    let interval;
+    let destroyFn = null;
 
-    const setup = async () => {
+    const setup = () => {
       if (!containerRef.current) return;
 
-      app = new Application();
-      await app.init({
-        resizeTo: containerRef.current,
-        background: '#282a36',
-        antialias: true,
+      const canvas = document.createElement("canvas");
+      canvas.width = 600;
+      canvas.height = 400;
+      containerRef.current.appendChild(canvas);
+      canvasRef.current = canvas;
+
+      const k = kaplay({
+        width: 600,
+        height: 300,
+        canvas: canvas,
+        background: [40, 42, 54],
+        font: "monospace",
+        plugins: [],
       });
 
-      containerRef.current.appendChild(app.canvas);
+      const centerX = 300;
+      const centerY = 200;
 
-      const centerX = app.renderer.width / 2;
-      const centerY = app.renderer.height / 2;
+      const timeLabel = k.add([
+        k.text("", { size: 32 }),
+        k.color(241, 250, 140),
+        k.pos(centerX, centerY - 20),
+        k.anchor("center"),
+      ]);
 
-      const timeText = new Text('', {
-        fontFamily: 'monospace',
-        fontSize: 56,
-        fill: 0xf1fa8c,
-        align: 'center',
-      });
-      timeText.anchor.set(0.5);
-      timeText.position.set(centerX, centerY - 20);
-      app.stage.addChild(timeText);
-
-      const infoText = new Text("Yes, it's Roman. Yes, it's two hours in the future. You're welcome, time traveler.", {
-        fontFamily: 'monospace',
-        fontSize: 12,
-        fill: 0x8be9fd,
-        align: 'center',
-        wordWrap: true,
-        wordWrapWidth: app.renderer.width - 40,
-      });
-      infoText.anchor.set(0.5);
-      infoText.position.set(centerX, centerY + 50);
-      app.stage.addChild(infoText);
+      const infoLabel = k.add([
+        k.text(
+          "Yes, it's Roman. Yes, it's two hours in the future. You're welcome, time traveler.",
+          {
+            size: 12,
+            width: 500,
+          }
+        ),
+        k.color(139, 233, 253),
+        k.pos(centerX, centerY + 50),
+        k.anchor("center"),
+      ]);
 
       const updateClock = () => {
         const now = new Date();
@@ -74,27 +88,37 @@ export default function FutureClock() {
         const romanMinute = romanize(minute);
 
         const newText = `${romanHour}:${romanSecond}:${romanMinute}`;
-        if (timeText.text !== newText) {
-          timeText.text = newText;
+        if (timeLabel.text !== newText) {
+          timeLabel.text = newText;
+
           gsap.fromTo(
-            timeText,
-            { y: centerY + 10, alpha: 0 },
-            { y: centerY - 20, alpha: 1, duration: 0.4, ease: 'power2.out' }
+            timeLabel,
+            { y: centerY + 10, opacity: 0 },
+            { y: centerY - 20, opacity: 1, duration: 0.4, ease: "power2.out" }
           );
         }
       };
 
       updateClock();
-      interval = setInterval(updateClock, 1000);
+      const interval = setInterval(updateClock, 1000);
+
+      destroyFn = () => {
+        clearInterval(interval);
+        k.destroy();
+        if (canvasRef.current && containerRef.current) {
+          containerRef.current.removeChild(canvasRef.current);
+        }
+      };
     };
 
     setup();
 
     return () => {
-      if (interval) clearInterval(interval);
-      if (app) app.destroy(true, { children: true });
+      if (destroyFn) destroyFn();
     };
   }, []);
 
-  return <div ref={containerRef} className="w-[600px] h-[400px] overflow-hidden" />;
+  return (
+    <div ref={containerRef} className="w-[600px] h-[400px] overflow-hidden" />
+  );
 }
