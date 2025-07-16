@@ -1,24 +1,33 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
+import useWikiStore from "../stores/useWikiStore";
 import "../assets/app.css";
 
 function BrowserWiki() {
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState(null);
-  const [offline, setOffline] = useState(false);
-  const [notFound, setNotFound] = useState(false);
-  const [iframeUrl, setIframeUrl] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const [gameStarted, setGameStarted] = useState(false);
-  const [clickCount, setClickCount] = useState(0);
-  const [startTime, setStartTime] = useState(null);
-  const [buttonPos, setButtonPos] = useState({
-    top: "0px",
-    left: "0px",
-    scale: 1,
-  });
+  const {
+    query,
+    results,
+    offline,
+    notFound,
+    iframeUrl,
+    loading,
+    message,
+    gameStarted,
+    clickCount,
+    startTime,
+    buttonPos,
+    setQuery,
+    setResults,
+    setOffline,
+    setNotFound,
+    setIframeUrl,
+    setLoading,
+    setMessage,
+    startGame,
+    endGame,
+    incrementClick,
+    setButtonPos,
+  } = useWikiStore();
 
   const searchRef = useRef(null);
   const browserRef = useRef(null);
@@ -37,7 +46,7 @@ function BrowserWiki() {
     if (e.key === " ") {
       e.preventDefault();
       const randomSpaces = " ".repeat(Math.floor(Math.random() * 4) + 1);
-      setQuery((prev) => prev + randomSpaces);
+      setQuery(query + randomSpaces);
     }
     if (e.key === "Enter") {
       initiateGame();
@@ -51,9 +60,7 @@ function BrowserWiki() {
   };
 
   const initiateGame = () => {
-    setGameStarted(true);
-    setClickCount(0);
-    setStartTime(Date.now());
+    startGame();
     gsap.to(buttonRef.current, { scale: 0.8, duration: 0.3 });
   };
 
@@ -65,17 +72,16 @@ function BrowserWiki() {
 
     const elapsed = (Date.now() - startTime) / 1000;
     if (elapsed > 10) {
-      setGameStarted(false);
+      endGame();
       setMessage("⏰ Too slow! Try again.");
       gsap.to(buttonRef.current, { scale: 1, duration: 0.3 });
       return;
     }
 
-    const newCount = clickCount + 1;
-    setClickCount(newCount);
+    incrementClick();
 
-    if (newCount >= 4) {
-      setGameStarted(false);
+    if (clickCount + 1 >= 4) {
+      endGame();
       gsap.to(buttonRef.current, { scale: 1, duration: 0.3 });
       searchWiki();
     } else {
@@ -89,6 +95,7 @@ function BrowserWiki() {
         left: `${randomLeft}px`,
         scale: 0.8,
       });
+
       gsap.to(buttonRef.current, {
         top: randomTop,
         left: randomLeft,

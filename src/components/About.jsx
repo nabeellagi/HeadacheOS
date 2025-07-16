@@ -4,23 +4,7 @@ import { Icon } from "@iconify/react";
 import "../assets/app.css";
 import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
-
-const specs = [
-  { label: "OS Name", value: "HeadacheOS 69.00", icon: "mdi:desktop-classic" },
-  {
-    label: "Developer",
-    value: "A sleepless teenager fueled by nasi uduk, search it",
-    icon: "mdi:noodles",
-  },
-  { label: "RAM Usage", value: "GB GB something", icon: "mdi:memory" },
-  { label: "Boot Time", value: "Sometimes", icon: "mdi:clock-alert" },
-  { label: "Error Rate", value: "%", icon: "mdi:alert-circle" },
-  {
-    label: "Uptime Record",
-    value: "I don't remember",
-    icon: "mdi:progress-clock",
-  },
-];
+import specs from "../data/fakeSpecs";
 
 export default function AboutHeadacheOS() {
   const containerRef = useRef(null);

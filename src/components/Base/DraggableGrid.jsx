@@ -1,93 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import interact from "interactjs";
 import { Icon } from "@iconify/react";
-import Window from "./Window.jsx"; // Adjust the path as needed
+import Window from "./Window.jsx";
+import initialApps from "../../data/initialApps.js";
 
 const GRID_SIZE = 100;
 const NUM_COLS = 8;
 
-const initialApps = [
-  {
-    id: 1,
-    name: "Calculator",
-    icon: "mdi:calculator",
-    x: 0,
-    y: 0,
-    route: "calculator",
-    width: 400,
-    height: 600,
-  },
-  {
-    id: 2,
-    name: "Notes",
-    icon: "mdi:notebook-outline",
-    x: 2,
-    y: 0,
-    route: "notes",
-    width: 400,
-    height: 300,
-  },
-  {
-    id: 3,
-    name: "Wallpaper Manager",
-    icon: "mingcute:greatwall-fill",
-    x: 2,
-    y: 2,
-    route: "wallpaper",
-    width: 400,
-    height: 400,
-  },
-  {
-    id: 4,
-    name: "Clock?",
-    icon: "tabler:clock-filled",
-    x: 4,
-    y: 2,
-    route: "clock",
-    width: 600,
-    height: 400,
-  },
-  {
-    id: 5,
-    name: "Browser",
-    icon: "ic:twotone-settings-applications",
-    x: 6,
-    y: 2,
-    route: "browser",
-    width: 600,
-    height: 600,
-  },
-  {
-    id: 6,
-    name: "WPM Test",
-    icon: "mingcute:keyboard-fill",
-    x: 8,
-    y: 2,
-    route: "wpm",
-    width: 800,
-    height: 800,
-  },
-  {
-    id: 7,
-    name: "Music",
-    icon: "mingcute:music-2-ai-fill",
-    x: 2,
-    y: 6,
-    route: "music",
-    width: 500,
-    height: 700,
-  },
-  {
-    id: 8,
-    name: "'Bout",
-    icon: "mingcute:question-fill",
-    x: 4,
-    y: 6,
-    route: "about",
-    width: 500,
-    height: 500,
-  },
-];
+// initialApps
 
 export default function DraggableGrid() {
   const [apps, setApps] = useState(initialApps);
