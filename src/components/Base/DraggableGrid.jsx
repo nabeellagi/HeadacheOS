@@ -7,8 +7,6 @@ import initialApps from "../../data/initialApps.js";
 const GRID_SIZE = 100;
 const NUM_COLS = 8;
 
-// initialApps
-
 export default function DraggableGrid() {
   const [apps, setApps] = useState(initialApps);
   const [openWindows, setOpenWindows] = useState([]);
