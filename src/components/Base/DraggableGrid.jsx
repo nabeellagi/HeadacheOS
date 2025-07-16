@@ -1,18 +1,92 @@
-import React, { useEffect, useRef, useState } from 'react';
-import interact from 'interactjs';
-import { Icon } from '@iconify/react';
-import Window from './Window.jsx'; // Adjust the path as needed
+import React, { useEffect, useRef, useState } from "react";
+import interact from "interactjs";
+import { Icon } from "@iconify/react";
+import Window from "./Window.jsx"; // Adjust the path as needed
 
 const GRID_SIZE = 100;
 const NUM_COLS = 8;
 
 const initialApps = [
-  { id: 1, name: 'Calculator', icon: 'mdi:calculator', x: 0, y: 0, route: 'calculator', width:400, height:600 },
-  { id: 2, name: 'Notes', icon: 'mdi:notebook-outline', x: 2, y: 0, route: 'notes', width:400, height:300 },
-  { id: 3, name: 'Wallpaper Manager', icon: 'mingcute:greatwall-fill', x: 2, y: 2, route: 'wallpaper', width:400, height:400 },
-  { id: 4, name: 'Clock?', icon: 'tabler:clock-filled', x: 4, y: 2, route: 'clock', width:600, height:400 },
-  { id: 5, name: 'Browser', icon: 'ic:twotone-settings-applications', x: 6, y: 2, route: 'browser', width:600, height:600 },
-  { id: 6, name: 'WPM Test', icon: 'mingcute:keyboard-fill', x: 8, y: 2, route: 'wpm', width:800, height:800 },
+  {
+    id: 1,
+    name: "Calculator",
+    icon: "mdi:calculator",
+    x: 0,
+    y: 0,
+    route: "calculator",
+    width: 400,
+    height: 600,
+  },
+  {
+    id: 2,
+    name: "Notes",
+    icon: "mdi:notebook-outline",
+    x: 2,
+    y: 0,
+    route: "notes",
+    width: 400,
+    height: 300,
+  },
+  {
+    id: 3,
+    name: "Wallpaper Manager",
+    icon: "mingcute:greatwall-fill",
+    x: 2,
+    y: 2,
+    route: "wallpaper",
+    width: 400,
+    height: 400,
+  },
+  {
+    id: 4,
+    name: "Clock?",
+    icon: "tabler:clock-filled",
+    x: 4,
+    y: 2,
+    route: "clock",
+    width: 600,
+    height: 400,
+  },
+  {
+    id: 5,
+    name: "Browser",
+    icon: "ic:twotone-settings-applications",
+    x: 6,
+    y: 2,
+    route: "browser",
+    width: 600,
+    height: 600,
+  },
+  {
+    id: 6,
+    name: "WPM Test",
+    icon: "mingcute:keyboard-fill",
+    x: 8,
+    y: 2,
+    route: "wpm",
+    width: 800,
+    height: 800,
+  },
+  {
+    id: 7,
+    name: "Music",
+    icon: "mingcute:music-2-ai-fill",
+    x: 2,
+    y: 6,
+    route: "music",
+    width: 500,
+    height: 700,
+  },
+  {
+    id: 8,
+    name: "'Bout",
+    icon: "mingcute:question-fill",
+    x: 4,
+    y: 6,
+    route: "about",
+    width: 500,
+    height: 500,
+  },
 ];
 
 export default function DraggableGrid() {
@@ -22,7 +96,7 @@ export default function DraggableGrid() {
 
   // Initialize interactjs for draggable icons
   useEffect(() => {
-    interact('.draggable').draggable({
+    interact(".draggable").draggable({
       modifiers: [
         interact.modifiers.snap({
           targets: [interact.snappers.grid({ x: GRID_SIZE, y: GRID_SIZE })],
@@ -30,7 +104,7 @@ export default function DraggableGrid() {
           relativePoints: [{ x: 0, y: 0 }],
         }),
         interact.modifiers.restrictRect({
-          restriction: 'parent',
+          restriction: "parent",
           endOnly: true,
         }),
       ],
@@ -41,7 +115,7 @@ export default function DraggableGrid() {
           const deltaX = event.dx;
           const deltaY = event.dy;
 
-          const app = apps.find(a => a.id === id);
+          const app = apps.find((a) => a.id === id);
           if (!app) return;
 
           const newX = app.x * GRID_SIZE + deltaX;
@@ -51,12 +125,12 @@ export default function DraggableGrid() {
           const snappedY = Math.round(newY / GRID_SIZE);
 
           const isOccupied = apps.some(
-            a => a.id !== id && a.x === snappedX && a.y === snappedY
+            (a) => a.id !== id && a.x === snappedX && a.y === snappedY
           );
           if (isOccupied) return;
 
-          setApps(prev =>
-            prev.map(a =>
+          setApps((prev) =>
+            prev.map((a) =>
               a.id === id ? { ...a, x: snappedX, y: snappedY } : a
             )
           );
@@ -67,16 +141,15 @@ export default function DraggableGrid() {
 
   // Handle icon click to open window
   const handleIconClick = (app) => {
-    if (openWindows.some(w => w.id === app.id)) return;
-    setOpenWindows(prev => [...prev, { ...app }]);
+    if (openWindows.some((w) => w.id === app.id)) return;
+    setOpenWindows((prev) => [...prev, { ...app }]);
   };
 
   const closeWindow = (id) => {
-    setOpenWindows(prev => prev.filter(w => w.id !== id));
+    setOpenWindows((prev) => prev.filter((w) => w.id !== id));
   };
 
   const minimizeWindow = (id) => {
-    // Currently just closes, you can change to a "minimized" state
     closeWindow(id);
   };
 
@@ -85,15 +158,15 @@ export default function DraggableGrid() {
       ref={containerRef}
       className="relative w-full min-h-screen p-6 md:p-12 overflow-hidden"
       style={{
-        display: 'grid',
+        display: "grid",
         gridTemplateColumns: `repeat(${NUM_COLS}, ${GRID_SIZE}px)`,
         gridAutoRows: `${GRID_SIZE}px`,
-        gap: '2px',
-        position: 'relative',
+        gap: "2px",
+        position: "relative",
       }}
     >
       {/* Draggable App Icons */}
-      {apps.map(app => (
+      {apps.map((app) => (
         <div
           key={app.id}
           onClick={() => handleIconClick(app)}
@@ -102,17 +175,21 @@ export default function DraggableGrid() {
           style={{
             width: `${GRID_SIZE}px`,
             height: `${GRID_SIZE}px`,
-            position: 'absolute',
-            transform: `translate(${app.x * GRID_SIZE}px, ${app.y * GRID_SIZE}px)`,
+            position: "absolute",
+            transform: `translate(${app.x * GRID_SIZE}px, ${
+              app.y * GRID_SIZE
+            }px)`,
           }}
         >
           <Icon icon={app.icon} width={32} height={32} />
-          <span className="text-xs mt-1 text-center text-semibold">{app.name}</span>
+          <span className="text-xs mt-1 text-center text-semibold">
+            {app.name}
+          </span>
         </div>
       ))}
 
       {/* Windows Layered Over */}
-      {openWindows.map(win => (
+      {openWindows.map((win) => (
         <Window
           key={win.id}
           id={win.id}

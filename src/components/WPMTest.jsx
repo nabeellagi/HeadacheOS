@@ -1,55 +1,29 @@
-import React, { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
+import React, { useEffect, useRef } from 'react';
 import { nanoid } from 'nanoid';
-import '../assets/app.css'
+import { useWPMStore } from '../stores/useWPMStore';
+import '../assets/app.css';
 
-const CHAR_SET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+-=[]{}|;:",.<>?/`~\\';
+export default function WPMTest() {
+  const {
+    gameStarted, loading, timer, text, input, gameEnded,
+    showWarning, pauseInput,
+    setInput, setGameEnded, startGame,
+    incrementTimer, setPauseInput, setShowWarning,
+    calculateWPM, getRoast
+  } = useWPMStore();
 
-const generateText = (length = 200) => {
-  let result = '';
-  for (let i = 0; i < length; i++) {
-    result += CHAR_SET[Math.floor(Math.random() * CHAR_SET.length)];
-  }
-  return result;
-};
-
-export default function WPMTest (){
-  const [gameStarted, setGameStarted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [timer, setTimer] = useState(0);
-  const [text, setText] = useState('');
-  const [input, setInput] = useState('');
-  const [gameEnded, setGameEnded] = useState(false);
-  const [showWarning, setShowWarning] = useState(false);
-  const [pauseInput, setPauseInput] = useState(false);
-
-  const intervalRef = useRef(null);
   const inputRef = useRef(null);
+  const intervalRef = useRef(null);
   const wrongStreakRef = useRef(0);
 
   useEffect(() => {
     if (gameStarted && !gameEnded) {
       intervalRef.current = setInterval(() => {
-        setTimer((prev) => prev + 1);
+        incrementTimer();
       }, 1000);
     }
     return () => clearInterval(intervalRef.current);
   }, [gameStarted, gameEnded]);
-
-  const startGame = () => {
-    setLoading(true);
-    gsap.to("#loadingText", { opacity: 1, duration: 1, repeat: -1, yoyo: true });
-
-    setTimeout(() => {
-      setText(generateText());
-      setTimer(5); 
-      setGameStarted(true);
-      setLoading(false);
-      setInput('');
-      inputRef.current.focus();
-      clearInterval(intervalRef.current);
-    }, 5000);
-  };
 
   const handleInput = (e) => {
     if (pauseInput || gameEnded) return;
@@ -58,16 +32,15 @@ export default function WPMTest (){
     const newChar = newValue[newValue.length - 1];
     const expectedChar = text[newValue.length - 1];
 
-    // Pause if wrong 5 in a row
     if (newChar && newChar !== expectedChar) {
       wrongStreakRef.current += 1;
     } else {
       wrongStreakRef.current = 0;
     }
 
-    if (wrongStreakRef.current >= 5) {
-      setShowWarning(true);
+    if (wrongStreakRef.current >= 2) {
       setPauseInput(true);
+      setShowWarning(true);
       setTimeout(() => {
         setPauseInput(false);
         setShowWarning(false);
@@ -79,26 +52,10 @@ export default function WPMTest (){
 
     setInput(newValue);
 
-    // Game ends if input is complete
     if (newValue.length === text.length) {
       clearInterval(intervalRef.current);
       setGameEnded(true);
     }
-  };
-
-  const calculateWPM = () => {
-    if (timer === 0) return 0;
-    const correctChars = [...input].filter((char, i) => char === text[i]).length;
-    return Math.round((correctChars / 5) / (timer / 60));
-  };
-
-  const getRoast = (wpm) => {
-    if (wpm > 120) return "You're an alien. Go touch grass.";
-    if (wpm > 80) return "Your fingers probably evolved.";
-    if (wpm > 50) return "Pretty fast. Have you done this before?";
-    if (wpm > 30) return "Acceptable. But meh.";
-    if (wpm > 10) return "Did you just wake up?";
-    return "You type like you're underwater.";
   };
 
   return (
@@ -144,7 +101,7 @@ export default function WPMTest (){
               <div className="text-xl font-bold">WPM: {calculateWPM()}</div>
               {showWarning && (
                 <div className="text-error text-sm font-mono mt-2">
-                  ⚠️ 5 typos in a row. Take a breath, pausing for 2 seconds...
+                  ⚠️ 2 typos in a row. Take a breath, pausing for 2 seconds...
                 </div>
               )}
             </>
@@ -155,7 +112,7 @@ export default function WPMTest (){
               <h2 className="text-2xl font-bold text-success">Test Complete</h2>
               <p className="text-lg font-mono">Time: {timer}s</p>
               <p className="text-lg font-mono">WPM: {calculateWPM()}</p>
-              <div className="text-warning text-sm italic mt-2">{getRoast(calculateWPM())}</div>
+              <div className="text-warning text-sm italic mt-2">{getRoast()}</div>
               <button className="btn btn-outline mt-4" onClick={() => window.location.reload()}>
                 Retry
               </button>
@@ -165,4 +122,4 @@ export default function WPMTest (){
       )}
     </div>
   );
-};
+}
