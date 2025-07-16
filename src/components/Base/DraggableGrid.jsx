@@ -12,7 +12,7 @@ const initialApps = [
   { id: 3, name: 'Wallpaper Manager', icon: 'mingcute:greatwall-fill', x: 2, y: 2, route: 'wallpaper', width:400, height:400 },
   { id: 4, name: 'Clock?', icon: 'tabler:clock-filled', x: 4, y: 2, route: 'clock', width:600, height:400 },
   { id: 5, name: 'Browser', icon: 'ic:twotone-settings-applications', x: 6, y: 2, route: 'browser', width:600, height:600 },
-
+  { id: 6, name: 'WPM Test', icon: 'mingcute:keyboard-fill', x: 8, y: 2, route: 'wpm', width:800, height:800 },
 ];
 
 export default function DraggableGrid() {

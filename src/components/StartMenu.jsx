@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { Icon } from '@iconify/react';
+import '../assets/app.css';
 
-const StartMenu = () => {
+function StartMenu(){
   const [visible, setVisible] = useState(false);
   const [overlay, setOverlay] = useState(null); // 'sleep' | 'restart' | 'shutdown'
   const [sleepCooldown, setSleepCooldown] = useState(false);

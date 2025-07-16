@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import '../assets/app.css'
 
 function BrowserWiki() {
   const [query, setQuery] = useState('');
@@ -10,9 +11,15 @@ function BrowserWiki() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
+  const [gameStarted, setGameStarted] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
+  const [startTime, setStartTime] = useState(null);
+  const [buttonPos, setButtonPos] = useState({ top: '0px', left: '0px', scale: 1 });
+
   const searchRef = useRef(null);
   const browserRef = useRef(null);
   const loaderRef = useRef(null);
+  const buttonRef = useRef(null);
 
   useEffect(() => {
     gsap.from(browserRef.current, { opacity: 0, y: 50, duration: 1 });
@@ -29,7 +36,7 @@ function BrowserWiki() {
       setQuery((prev) => prev + randomSpaces);
     }
     if (e.key === 'Enter') {
-      searchWiki();
+      initiateGame();
     }
   };
 
@@ -37,6 +44,50 @@ function BrowserWiki() {
     let val = e.target.value;
     val = val.replace(/[A-Z]/g, (c) => c.toLowerCase());
     setQuery(val);
+  };
+
+  const initiateGame = () => {
+    setGameStarted(true);
+    setClickCount(0);
+    setStartTime(Date.now());
+    gsap.to(buttonRef.current, { scale: 0.8, duration: 0.3 });
+  };
+
+  const handleGameClick = () => {
+    if (!gameStarted) {
+      initiateGame();
+      return;
+    }
+
+    const elapsed = (Date.now() - startTime) / 1000;
+    if (elapsed > 10) {
+      setGameStarted(false);
+      setMessage('⏰ Too slow! Try again.');
+      gsap.to(buttonRef.current, { scale: 1, duration: 0.3 });
+      return;
+    }
+
+    const newCount = clickCount + 1;
+    setClickCount(newCount);
+
+    if (newCount >= 4) {
+      setGameStarted(false);
+      gsap.to(buttonRef.current, { scale: 1, duration: 0.3 });
+      searchWiki();
+    } else {
+      const maxTop = window.innerHeight - 100;
+      const maxLeft = window.innerWidth - 200;
+      const randomTop = Math.floor(Math.random() * maxTop);
+      const randomLeft = Math.floor(Math.random() * maxLeft);
+
+      setButtonPos({ top: `${randomTop}px`, left: `${randomLeft}px`, scale: 0.8 });
+      gsap.to(buttonRef.current, {
+        top: randomTop,
+        left: randomLeft,
+        duration: 0.4,
+        ease: 'power2.out'
+      });
+    }
   };
 
   const searchWiki = async () => {
@@ -57,15 +108,12 @@ function BrowserWiki() {
     );
 
     setTimeout(async () => {
-
       if (offlineChance < 0.5) {
         setOffline(true);
         setLoading(false);
         setMessage('⚠️ Hey, is it offline or online? Idk, do something');
         return;
       }
-
-
 
       try {
         const res = await fetch(
@@ -98,7 +146,7 @@ function BrowserWiki() {
   };
 
   return (
-    <div ref={browserRef} className="mockup-browser border bg-base-200 max-w-full w-full min-h-[90vh] shadow-lg">
+    <div ref={browserRef} className="mockup-browser border bg-base-200 max-w-full w-full min-h-[90vh] shadow-lg relative">
       <div className="mockup-browser-toolbar">
         <div className="input">https://headacheOS.search</div>
       </div>
@@ -116,10 +164,12 @@ function BrowserWiki() {
                 className="input input-bordered w-full"
               />
               <button
-                onClick={searchWiki}
-                className="btn btn-primary"
+                ref={buttonRef}
+                onClick={handleGameClick}
+                className="btn btn-primary fixed z-50"
+                style={{ top: buttonPos.top, left: buttonPos.left, transform: `scale(${buttonPos.scale})` }}
               >
-                Search
+                {gameStarted ? `Click Me (${clickCount}/4)` : 'Search'}
               </button>
             </div>
 

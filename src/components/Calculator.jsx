@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import gsap from 'gsap';
 import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
+import '../assets/app.css'
 
 const binary = (num) => (isNaN(num) ? 'NaN' : (parseInt(num) >>> 0).toString(2));
 

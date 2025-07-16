@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Application, Text } from 'pixi.js';
 import gsap from 'gsap';
+import '../assets/app.css'
 
 const romanize = (num) => {
   const lookup = {
