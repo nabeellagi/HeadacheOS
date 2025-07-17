@@ -1,47 +1,54 @@
-# Astro Starter Kit: Minimal
+# 🧠 HeadacheOS
 
-```sh
-npm create astro@latest -- --template minimal
-```
+> **"A beautiful mess bad UX."**
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+Welcome to **HeadacheOS**! a chaotic, retro-inspired OS on web desktop environment. This project is a playground for interactive experiment. Whether you're here to explore, learn, or just vibe with the absurd, HeadacheOS welcomes you with... idk.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+---
 
-## 🚀 Project Structure
+## ⚙️ Tech Stack
 
-Inside of your Astro project, you'll see the following folders and files:
+HeadacheOS is built using:
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+* **[Astro](https://astro.build/)** : for lightning-fast static site generation and clean island architecture.
+* **[React](https://reactjs.org/)** : to power the dynamic components and stateful interactions within the OS experience.
+* **[TailwindCSS + DaisyUI](https://daisyui.com/)** : for utility-first styling and responsive UI elements.
+* **[Zustand](https://github.com/pmndrs/zustand)** : a minimal, scalable state manager.
+* **[GSAP](https://greensock.com/gsap/)** : animating everything.
+* **[Kaplay.js](https://kaplayjs.com/)** : for canvas stuff, for now its just a clock.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 🖼️ Preview
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+<div align="center">
 
-Any static assets, like images, can be placed in the `public/` directory.
+  <figure style="display: inline-block; margin: 1rem; max-width: 90%;">
+    <img src="footages/ss (1).png" width="300" style="border-radius: 8px;" />
+    <figcaption><strong>Desktop View</strong><br/>The main OS window interface and the gambling music player.</figcaption>
+  </figure>
 
-## 🧞 Commands
+  <figure style="display: inline-block; margin: 1rem; max-width: 90%;">
+    <img src="footages/ss (3).png" width="300" style="border-radius: 8px;" />
+    <figcaption><strong>Apps</strong><br/>To use calculator, solve math first. And clock from the future.</figcaption>
+  </figure>
 
-All commands are run from the root of the project, from a terminal:
+  <figure style="display: inline-block; margin: 1rem; max-width: 90%;">
+    <img src="footages/ss (4).png" width="300" style="border-radius: 8px;" />
+    <figcaption><strong>Wallpaper manager</strong><br/>Change your wallpaper easily</figcaption>
+  </figure>
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+  <figure style="display: inline-block; margin: 1rem; max-width: 90%;">
+    <img src="footages/ss (6).png" width="300" style="border-radius: 8px;" />
+    <figcaption><strong>More Apps</strong><br/>Try our WPM test, and Image Explorer with Quick Time Event</figcaption>
+  </figure>
 
-## 👀 Want to learn more?
+  <figure style="display: inline-block; margin: 1rem; max-width: 90%;">
+    <img src="footages/ss (7).png" width="300" style="border-radius: 8px;" />
+    <figcaption><strong>You can code here</strong><br/>Rotate your screen to code.</figcaption>
+  </figure>
+</div>
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+---
+
+🎯 **Curious?**
+FIND ALL THE EASTER EGGS AND FEATURES!  
+Go check it out: [https://headacheos.netlify.app/](https://headacheos.netlify.app/)
