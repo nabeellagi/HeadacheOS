@@ -19,32 +19,33 @@ HeadacheOS is built using:
 
 ## 🖼️ Preview
 
-<div align="center">
+<div align="center" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem;">
 
-  <figure>
-    <img src="footages/ss (1).png" width="300" style="border-radius: 8px;" />
-    <figcaption><strong>Desktop View</strong><br/>The main OS window interface and the gambling music player.</figcaption>
-  </figure>
+  <div style="max-width: 300px;">
+    <img src="footages/ss (1).png" width="100%" style="border-radius: 8px;" />
+    <p><strong>Desktop View</strong><br/>The main OS window interface and the gambling music player.</p>
+  </div>
 
-  <figure>
-    <img src="footages/ss (3).png" width="300" style="border-radius: 8px;" />
-    <figcaption><strong>Apps</strong><br/>To use calculator, solve math first. And clock from the future.</figcaption>
-  </figure>
+  <div style="max-width: 300px;">
+    <img src="footages/ss (3).png" width="100%" style="border-radius: 8px;" />
+    <p><strong>Apps</strong><br/>To use calculator, solve math first. And clock from the future.</p>
+  </div>
 
-  <figure>
-    <img src="footages/ss (4).png" width="300" style="border-radius: 8px;" />
-    <figcaption><strong>Wallpaper manager</strong><br/>Change your wallpaper easily</figcaption>
-  </figure>
+  <div style="max-width: 300px;">
+    <img src="footages/ss (4).png" width="100%" style="border-radius: 8px;" />
+    <p><strong>Wallpaper Manager</strong><br/>Change your wallpaper easily.</p>
+  </div>
 
-  <figure>
-    <img src="footages/ss (6).png" width="300" style="border-radius: 8px;" />
-    <figcaption><strong>More Apps</strong><br/>Try our WPM test, and Image Explorer with Quick Time Event</figcaption>
-  </figure>
+  <div style="max-width: 300px;">
+    <img src="footages/ss (6).png" width="100%" style="border-radius: 8px;" />
+    <p><strong>More Apps</strong><br/>Try our WPM test, and Image Explorer with Quick Time Event.</p>
+  </div>
 
-  <figure>
-    <img src="footages/ss (7).png" width="300" style="border-radius: 8px;" />
-    <figcaption><strong>You can code here</strong><br/>Rotate your screen to code.</figcaption>
-  </figure>
+  <div style="max-width: 300px;">
+    <img src="footages/ss (7).png" width="100%" style="border-radius: 8px;" />
+    <p><strong>You Can Code Here</strong><br/>Rotate your screen to code.</p>
+  </div>
+
 </div>
 
 ---
