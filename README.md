@@ -21,27 +21,27 @@ HeadacheOS is built using:
 
 <div align="center">
 
-  <figure style="display: inline-block; margin: 1rem; max-width: 90%;">
+  <figure>
     <img src="footages/ss (1).png" width="300" style="border-radius: 8px;" />
     <figcaption><strong>Desktop View</strong><br/>The main OS window interface and the gambling music player.</figcaption>
   </figure>
 
-  <figure style="display: inline-block; margin: 1rem; max-width: 90%;">
+  <figure>
     <img src="footages/ss (3).png" width="300" style="border-radius: 8px;" />
     <figcaption><strong>Apps</strong><br/>To use calculator, solve math first. And clock from the future.</figcaption>
   </figure>
 
-  <figure style="display: inline-block; margin: 1rem; max-width: 90%;">
+  <figure>
     <img src="footages/ss (4).png" width="300" style="border-radius: 8px;" />
     <figcaption><strong>Wallpaper manager</strong><br/>Change your wallpaper easily</figcaption>
   </figure>
 
-  <figure style="display: inline-block; margin: 1rem; max-width: 90%;">
+  <figure>
     <img src="footages/ss (6).png" width="300" style="border-radius: 8px;" />
     <figcaption><strong>More Apps</strong><br/>Try our WPM test, and Image Explorer with Quick Time Event</figcaption>
   </figure>
 
-  <figure style="display: inline-block; margin: 1rem; max-width: 90%;">
+  <figure>
     <img src="footages/ss (7).png" width="300" style="border-radius: 8px;" />
     <figcaption><strong>You can code here</strong><br/>Rotate your screen to code.</figcaption>
   </figure>
