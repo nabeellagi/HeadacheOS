@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Howl } from 'howler';
 import gsap from 'gsap';
 import { Icon } from '@iconify/react';
@@ -6,6 +6,8 @@ import useMusicStore from '../stores/useMusicStore';
 import '../assets/app.css';
 import '@fontsource/roboto-slab';
 import { clickSound } from '../utils/clickSound';
+
+const SPEED_OPTIONS = [0.5, 1.0, 1.5, 2.0, 2.5];
 
 export default function MusicPlayer() {
   const {
@@ -26,6 +28,7 @@ export default function MusicPlayer() {
     setPlayState,
   } = useMusicStore();
 
+  const [playbackRate, setPlaybackRate] = useState(1.0);
   const howlRef = useRef(null);
   const spinRef = useRef([]);
   const volumeBtnRef = useRef([]);
@@ -33,6 +36,7 @@ export default function MusicPlayer() {
   const analyserRef = useRef(null);
   const dataArrayRef = useRef(null);
   const animationIdRef = useRef(null);
+  const rateRef = useRef(null);
 
   const totalVolume = volumeSlots.reduce((a, b) => a + b, 0);
 
@@ -80,11 +84,13 @@ export default function MusicPlayer() {
       src: [songList[index].src],
       volume: Math.min(1, totalVolume / 100),
       html5: true,
+      rate: playbackRate,
       onload: () => setLoading(false),
       onplay: () => {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const src = ctx.createMediaElementSource(howlRef.current._sounds[0]._node);
         setupVisualizer(ctx, src);
+        howlRef.current.rate(playbackRate);
       },
     });
 
@@ -95,7 +101,7 @@ export default function MusicPlayer() {
   useEffect(() => {
     playSong(currentIndex);
     return () => cancelAnimationFrame(animationIdRef.current);
-  }, [currentIndex]);
+  }, [currentIndex, playbackRate]);
 
   useEffect(() => {
     if (howlRef.current) {
@@ -128,12 +134,31 @@ export default function MusicPlayer() {
     }, 1400);
   };
 
+  const handleSpeedSpin = () => {
+    const newRate = SPEED_OPTIONS[Math.floor(Math.random() * SPEED_OPTIONS.length)];
+    setPlaybackRate(newRate);
+    clickSound('Retro1', 0.4);
+
+    if (rateRef.current) {
+      gsap.fromTo(rateRef.current, {
+        scale: 1,
+        rotate: 0
+      }, {
+        scale: 1.3,
+        rotate: 360,
+        duration: 0.8,
+        ease: 'elastic.out(1, 0.5)',
+        onComplete: () => gsap.to(rateRef.current, { scale: 1, duration: 0.2 })
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center w-full min-h-screen bg-base-200 p-4 animate-fadeIn font-['Roboto_Slab']">
       {isLoading && <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-60 text-white text-xl z-50">Loading...</div>}
       <div className="backdrop-blur-md bg-base-300/80 p-6 rounded-xl shadow-2xl w-full max-w-lg border border-base-content">
         <h2 className="text-2xl font-bold text-center mb-2 flex items-center justify-center gap-2">
-          <Icon icon="mdi:headphones" className="text-2xl" /> HeadacheOS Player
+          <Icon icon="mdi:headphones" className="text-2xl" /> Music Player
         </h2>
 
         <div className="text-center mb-4">
@@ -182,7 +207,7 @@ export default function MusicPlayer() {
           </div>
 
           <div className="flex gap-2">
-            <button className="btn btn-primary flex-1" onClick={()=>{
+            <button className="btn btn-primary flex-1" onClick={() => {
               handleSpin();
               clickSound('Spin', 0.3);
             }}>
@@ -215,6 +240,16 @@ export default function MusicPlayer() {
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="mt-4 text-center">
+            <p className="text-sm mb-1">Playback Speed:</p>
+            <div className="flex justify-center gap-2 items-center">
+              <button className="btn btn-accent btn-sm" onClick={handleSpeedSpin}>
+                <Icon icon="mdi:fast-forward-outline" className="mr-1" /> Spin Speed
+              </button>
+              <span ref={rateRef} className="text-lg font-bold">{playbackRate}x</span>
+            </div>
           </div>
 
           <canvas ref={canvasRef} width={600} height={150} className="mt-6 border border-base-content rounded w-full"></canvas>
