@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { clickSound } from '../../utils/clickSound';
 
 export default function Window({
   id,
@@ -87,11 +88,17 @@ export default function Window({
         <span className="truncate w-full">{title}</span>
         <div className="flex gap-2 ml-2 shrink-0">
           <button
-            onClick={onMinimize}
+            onClick={()=>{
+              onMinimize();
+              clickSound('Retro4');
+            }}
             className="w-3 h-3 rounded-full bg-yellow-400 hover:bg-yellow-500"
           />
           <button
-            onClick={onClose}
+            onClick={()=>{
+              onClose();
+              clickSound('Retro4');
+            }}
             className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600"
           />
         </div>

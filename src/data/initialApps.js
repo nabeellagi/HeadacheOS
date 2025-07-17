@@ -9,16 +9,16 @@ const initialApps = [
     width: 400,
     height: 600,
   },
-  {
-    id: 2,
-    name: "Notes",
-    icon: "mdi:notebook-outline",
-    x: 2,
-    y: 0,
-    route: "notes",
-    width: 400,
-    height: 300,
-  },
+  // {
+  //   id: 2,
+  //   name: "Notes",
+  //   icon: "mdi:notebook-outline",
+  //   x: 2,
+  //   y: 0,
+  //   route: "notes",
+  //   width: 400,
+  //   height: 300,
+  // },
   {
     id: 3,
     name: "Wallpaper Manager",
@@ -88,6 +88,16 @@ const initialApps = [
     route: "cat",
     width: 600,
     height: 620,
+  },
+  {
+    id: 10,
+    name: "VS Code Lite",
+    icon: "ri:file-code-fill",
+    x: 10,
+    y: 4,
+    route: "python",
+    width: 800,
+    height: 800,
   },
 ];
 

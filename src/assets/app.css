@@ -1,4 +1,4 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: retro --default, abyss --prefersdark;
+  themes: retro --default, abyss --prefersdark, caramellatte;
 }

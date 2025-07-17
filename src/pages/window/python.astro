@@ -1,10 +1,10 @@
 ---
 import '../../assets/app.css'
-import MusicPlayer from '../../components/MusicPlayer';
+import PythonRunner from '../../components/PythonRunner'
 ---
 
-<html lang="en">
+<html data-theme="caramellatte" lang="en">
   <body class="flex items-center justify-center bg-base-200 min-h-screen overflow-auto">
-    <MusicPlayer client:load />
+    <PythonRunner client:only="react" />
   </body>
 </html>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import '../../assets/app.css';
 
 export default function WallpaperWrapper({ children }) {
   const [bgUrl, setBgUrl] = useState('');

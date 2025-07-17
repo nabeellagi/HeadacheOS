@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import localforage from 'localforage';
 import { Icon } from '@iconify/react';
+import '../../assets/app.css';
 
 const subtextQueue = [
   'Extracting EXIF metadata...',
