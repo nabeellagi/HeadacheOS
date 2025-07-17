@@ -1,20 +1,30 @@
-import React, { useEffect, useState, useRef } from "react";
-import gsap from "gsap";
+import React, { useEffect, useRef } from "react";
 import { Icon } from "@iconify/react";
 import "../assets/app.css";
 import { clickSound } from "../utils/clickSound";
 import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
+import useCatStore from "../stores/useCatStore";
 
 const CAT_API = "https://api.thecatapi.com/v1/images/search?limit=15";
 
 export default function CatExplorer() {
-  const [fileList, setFileList] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [isViewerOpen, setIsViewerOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const {
+    fileList,
+    selectedImage,
+    isViewerOpen,
+    searchQuery,
+    qteStage,
+    setFileList,
+    addToFileList,
+    setSelectedImage,
+    setIsViewerOpen,
+    setSearchQuery,
+    setQteStage,
+    resetQTE,
+  } = useCatStore();
+
   const viewerRef = useRef(null);
-  const [qteStage, setQteStage] = useState(null);
   const holdTimer = useRef(null);
   const spaceCount = useRef(0);
   const tippyInstance = useRef(null);
@@ -24,16 +34,21 @@ export default function CatExplorer() {
     fetchCatFiles();
   }, []);
 
-  useEffect(() => {
-    if (isViewerOpen) {
-      gsap.fromTo(
-        viewerRef.current,
-        { opacity: 0, scale: 0.9 },
-        { opacity: 1, scale: 1, duration: 0.4, ease: "power2.out" }
-      );
+  const fetchCatFiles = async () => {
+    try {
+      const res = await fetch(CAT_API);
+      const data = await res.json();
+      const newFiles = data.map((cat) => {
+        const ext = cat.url.split(".").pop().split("?")[0];
+        return { name: `${cat.id}.${ext}`, url: cat.url };
+      });
+      addToFileList(newFiles);
+    } catch (err) {
+      console.error("Failed to fetch cat files:", err);
     }
-  }, [isViewerOpen]);
+  };
 
+  // QTE Logic
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.code === "Space") {
@@ -63,7 +78,7 @@ export default function CatExplorer() {
 
   useEffect(() => {
     if (qteStage === "space") {
-      let timer = setTimeout(() => {
+      const timer = setTimeout(() => {
         if (spaceCount.current >= 3) {
           setQteStage("done");
         } else {
@@ -82,32 +97,12 @@ export default function CatExplorer() {
     }
   }, [qteStage]);
 
-  const fetchCatFiles = async () => {
-    try {
-      const response = await fetch(CAT_API);
-      const data = await response.json();
-      const newFiles = data.map((cat) => {
-        const ext = cat.url.split(".").pop().split("?")[0];
-        return { name: `${cat.id}.${ext}`, url: cat.url };
-      });
-
-      const seen = new Set(fileList.map((file) => file.name));
-      const filteredFiles = newFiles.filter((file) => !seen.has(file.name));
-
-      setFileList((prev) => [...prev, ...filteredFiles]);
-    } catch (err) {
-      console.error("Failed to fetch cat files:", err);
-    }
-  };
-
   const failQTE = () => {
     if (selectedImage) {
-      setFileList((prev) =>
-        prev.filter((file) => file.name !== selectedImage.name)
-      );
+      setFileList(fileList.filter((f) => f.name !== selectedImage.name));
     }
-    setQteStage(null);
     setSelectedImage(null);
+    setQteStage(null);
     if (tippyInstance.current) {
       tippyInstance.current.setContent("You failed! Image deleted!");
       tippyInstance.current.show();
@@ -126,9 +121,8 @@ export default function CatExplorer() {
       trigger: "manual",
     });
 
-    let holdStart = Date.now();
-
-    const checkHold = () => {
+    const holdStart = Date.now();
+    holdTimer.current = setTimeout(() => {
       if (Date.now() - holdStart >= 5000) {
         setQteStage("space");
         spaceCount.current = 0;
@@ -141,14 +135,11 @@ export default function CatExplorer() {
       } else {
         failQTE();
       }
-    };
-
-    holdTimer.current = setTimeout(checkHold, 5000);
+    }, 5000);
   };
 
   const handleIconMouseDown = (file, e) => {
-    const iconEl = e.currentTarget;
-    beginQTE(file, iconEl);
+    beginQTE(file, e.currentTarget);
   };
 
   const handleIconMouseUp = () => {
