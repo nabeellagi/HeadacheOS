@@ -70,6 +70,7 @@ export default function Window({
         transform: `translate(${pos.x}px, ${pos.y}px)`,
         zIndex: 1000,
       }}
+      data-id={id}
     >
       <div
         ref={dragFrameRef}

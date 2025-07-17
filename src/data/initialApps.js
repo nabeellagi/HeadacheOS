@@ -1,5 +1,6 @@
-const rawApps = [
+const initialApps = [
   {
+    id: 1,
     name: "Calculator",
     icon: "mdi:calculator",
     x: 0,
@@ -9,6 +10,7 @@ const rawApps = [
     height: 600,
   },
   {
+    id: 2,
     name: "Notes",
     icon: "mdi:notebook-outline",
     x: 2,
@@ -18,6 +20,7 @@ const rawApps = [
     height: 300,
   },
   {
+    id: 3,
     name: "Wallpaper Manager",
     icon: "mingcute:greatwall-fill",
     x: 2,
@@ -27,6 +30,7 @@ const rawApps = [
     height: 400,
   },
   {
+    id: 4,
     name: "Clock?",
     icon: "tabler:clock-filled",
     x: 4,
@@ -36,6 +40,7 @@ const rawApps = [
     height: 400,
   },
   {
+    id: 5, 
     name: "Browser",
     icon: "ic:twotone-settings-applications",
     x: 6,
@@ -45,6 +50,7 @@ const rawApps = [
     height: 600,
   },
   {
+    id: 6,
     name: "WPM Test",
     icon: "mingcute:keyboard-fill",
     x: 8,
@@ -54,6 +60,7 @@ const rawApps = [
     height: 800,
   },
   {
+    id: 7,
     name: "Music",
     icon: "mingcute:music-2-ai-fill",
     x: 2,
@@ -63,6 +70,7 @@ const rawApps = [
     height: 700,
   },
   {
+    id: 8,
     name: "'Bout",
     icon: "mingcute:question-fill",
     x: 4,
@@ -72,6 +80,7 @@ const rawApps = [
     height: 500,
   },
   {
+    id: 9,
     name: "Image Viewer",
     icon: "mingcute:cat-fill",
     x: 8,
@@ -81,10 +90,5 @@ const rawApps = [
     height: 620,
   },
 ];
-
-const initialApps = rawApps.map((app, index) => ({
-  id: index + 1,
-  ...app,
-}));
 
 export default initialApps;
