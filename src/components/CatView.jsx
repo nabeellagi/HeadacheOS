@@ -102,7 +102,9 @@ export default function CatExplorer() {
 
   const failQTE = () => {
     if (selectedImage) {
-      setFileList((prev) => prev.filter((file) => file.name !== selectedImage.name));
+      setFileList((prev) =>
+        prev.filter((file) => file.name !== selectedImage.name)
+      );
     }
     setQteStage(null);
     setSelectedImage(null);
@@ -216,7 +218,9 @@ export default function CatExplorer() {
         >
           <div className="bg-base-100 w-full max-w-3xl rounded-xl shadow-2xl relative">
             <div className="flex justify-between items-center px-4 py-3 border-b border-base-300">
-              <span className="text-sm font-semibold truncate">{selectedImage.name}</span>
+              <span className="text-sm font-semibold truncate">
+                {selectedImage.name}
+              </span>
               <button
                 className="btn btn-xs btn-error gap-1"
                 onClick={() => {
