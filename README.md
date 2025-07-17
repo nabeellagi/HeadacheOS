@@ -50,6 +50,46 @@ HeadacheOS is built using:
 
 ---
 
+## 🚀 Getting Started
+
+Wanna run HeadacheOS locally? Here's how:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/nabeellagi/headacheos.git
+
+# 2. Move into the project directory
+cd headacheos
+
+# 3. Install dependencies
+npm install
+
+# 4. Start the development server
+npm run dev
+```
+
+Then open your browser and visit **[http://localhost:4321](http://localhost:4321)**
+
+> 🧠 **Note:** Make sure you have Node.js installed!
+
+---
+
+## 🧪 Bonus Tip
+
+If you want to build the site:
+
+```bash
+npm run build
+```
+
+And to preview the production build locally:
+
+```bash
+npm run preview
+```
+
+---
+
 🎯 **Curious?**
 FIND ALL THE EASTER EGGS AND FEATURES!  
 Go check it out: [https://headacheos.netlify.app/](https://headacheos.netlify.app/)
