@@ -67,7 +67,7 @@ const initialApps = [
     y: 6,
     route: "music",
     width: 500,
-    height: 700,
+    height: 750,
   },
   {
     id: 8,
